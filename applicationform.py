@@ -108,10 +108,11 @@ class MyApp(App):
         return layout
 
     def view(self):
-        layout = BoxLayout(orientation = "vertical")
-        refresh = Button(text = "refresh")
-        self.scroll = ScrollView()
-        self.cards = BoxLayout(orientation = "vertical")
+        layout = BoxLayout(orientation = "vertical", spacing = 10)
+        refresh = Button(text = "refresh", size_hint_y = None, height = 45)
+        self.scroll = ScrollView(size_hint = (1,1), bar_width = 12)
+        self.cards = BoxLayout(orientation = "vertical", spacing = 10)
+        self.cards.bind(minimum_height = self.cards.setter("height"))
         self.scroll.add_widget(self.cards)
         layout.add_widget(refresh)
         layout.add_widget(self.scroll)
@@ -119,10 +120,12 @@ class MyApp(App):
         return layout
     
     def load_students(self):
+        self.cards.clear_widgets()
         try:
             with open("students_data.txt", "r") as f:
                 for line in f:
                     card = self.create_student_card(line)
+                    self.cards.add_widget(card) 
         except:
             print("no data")
                     
